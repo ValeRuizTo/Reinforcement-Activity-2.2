@@ -1,5 +1,5 @@
 # Reinforcement-Activity-2.2
-
+## Valentina Ruiz, Tomas Barrios, Darek Aljuri, Rafael Salcedo
 ## Resumen del Diseño
 En este proyecto, diseñamos y validamos un componente de conectividad para nuestra aplicación IoT. Consideramos diversos tipos de redes y protocolos para garantizar una comunicación eficiente entre dispositivos.
 
