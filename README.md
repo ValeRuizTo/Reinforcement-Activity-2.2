@@ -7,7 +7,6 @@ En este proyecto, diseñamos y validamos un componente de conectividad para nues
 
 Además, implementamos un **tablero de control** que recibe datos en tiempo real desde los sensores a través de sockets UDP. Este tablero permite visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
 
-
 ## Tipo de Red
 Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compatibilidad con múltiples dispositivos IoT. Esta elección se basa en la existencia de una infraestructura de red estable en el entorno de las máquinas expendedoras, lo que permite la conexión directa de nuestros dispositivos al punto de acceso.
 
@@ -26,15 +25,18 @@ Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compat
 - Ideal para la transmisión de datos en redes locales sin necesidad de establecer una conexión permanente.
 
 ## Sensores y Proceso de Sensado
-Para lograr una correcta recolección de datos, los sensores están conectados a un **microcontrolador (MCU Board)**, que procesa la información y la envía al servidor. 
+Para lograr una correcta recolección de datos, los sensores están conectados a un **Single Board Computer (SBC Board)**, que procesa la información y la envía al servidor. 
+
+### Razón por la que no se utilizó un Microcontrolador (MCU)
+Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debido a limitaciones en la implementación del protocolo MQTT. Los microcontroladores, aunque eficientes para tareas específicas de sensado, requieren librerías y configuraciones adicionales para soportar MQTT, lo que complicaba la implementación en nuestro caso. En cambio, el **SBC Board** proporciona mayor capacidad de procesamiento y compatibilidad con herramientas necesarias para la comunicación IoT, incluyendo soporte nativo para MQTT, especialemnte en Packet Tracer
 
 ### Sensores Implementados y Funcionamiento
 - **Sensor de Peso (simulado con potenciómetro):** Se encarga de medir el peso de los productos dentro de la máquina expendedora. La lectura del sensor se compara con valores anteriores para determinar si hubo consumo y garantizar que se realice la reposición adecuada.
 - **Sensor de Voltaje (simulado con potenciómetro):** Detecta fluctuaciones en la corriente eléctrica. Si hay una caída o un pico de voltaje, el sistema lo registra y envía una alerta al servidor para que los técnicos puedan actuar a tiempo.
 - **Sensor de Temperatura (DS18B20):** Controla la temperatura de las bebidas calientes, asegurando que se mantengan dentro de un rango adecuado antes de ser dispensadas. Si la temperatura no está en el umbral correcto, se puede generar una alerta para mantenimiento.
 
-### Microcontrolador (MCU Board)
-- El microcontrolador lee periódicamente los valores de los sensores.
+### Single Board Computer (SBC Board)
+- El SBC Board lee periódicamente los valores de los sensores.
 - Procesa los datos para identificar patrones anómalos.
 - Utiliza Wi-Fi para enviar la información al servidor central mediante MQTT.
 - Puede recibir comandos desde el servidor en caso de ajustes necesarios.
@@ -44,7 +46,7 @@ Para una supervisión eficiente, el sistema incluye un **tablero de control** qu
 
 ### Uso de Sockets UDP
 - Se emplea **UDP (User Datagram Protocol)** para la transmisión de datos al tablero de control debido a su baja latencia y eficiencia en entornos de red local.
-- El microcontrolador envía paquetes de datos a una dirección IP específica en la red, donde el tablero de control está ejecutando un servicio que recibe y procesa la información.
+- El SBC Board envía paquetes de datos a una dirección IP específica en la red, donde el tablero de control está ejecutando un servicio que recibe y procesa la información.
 - Como UDP no requiere confirmación de recepción, se implementa un mecanismo de actualización periódica para asegurar que la información se refresque constantemente.
 
 ## Proceso de Validación
@@ -73,5 +75,4 @@ A continuación, se presentan imágenes de la simulación realizada en Cisco Pac
 Este proyecto demuestra la importancia del IoT en la optimización de máquinas expendedoras. A través de una red eficiente y protocolos adecuados, logramos implementar un sistema de monitoreo en tiempo real que mejora la gestión de inventario, asegura la calidad del producto y previene daños por fallas eléctricas. 
 
 Nuestro enfoque en Wi-Fi y MQTT garantiza una comunicación estable y eficiente, mientras que la integración de UDP permite un monitoreo rápido desde el tablero de control. Con este sistema, buscamos mejorar la operatividad de las máquinas expendedoras y facilitar su mantenimiento preventivo.
-
 
