@@ -57,8 +57,18 @@ Para validar nuestra conectividad, seguimos estos pasos en Cisco Packet Tracer:
 - **Retrasos en la Transmisión de Datos:** Para evitar latencias, optimizamos los parámetros de los sensores y configuramos adecuadamente el tiempo de actualización de los datos.
 - **Simulación de Sensores:** Dado que Cisco Packet Tracer no tiene sensores de peso y voltaje, usamos potenciómetros para representar sus valores en la simulación.
 
+## Imágenes de la Simulación en Cisco Packet Tracer
+A continuación, se presentan imágenes de la simulación realizada en Cisco Packet Tracer:
+
+![Diagrama de Conexión de Dispositivos](ruta_de_la_imagen)
+
+![Configuración del Broker MQTT](ruta_de_la_imagen)
+
+![Prueba de Comunicación entre Sensores y Servidor](ruta_de_la_imagen)
+
 ## Conclusión
 Este proyecto demuestra la importancia del IoT en la optimización de máquinas expendedoras. A través de una red eficiente y protocolos adecuados, logramos implementar un sistema de monitoreo en tiempo real que mejora la gestión de inventario, asegura la calidad del producto y previene daños por fallas eléctricas. 
 
 Nuestro enfoque en Wi-Fi y MQTT garantiza una comunicación estable y eficiente, mientras que la integración de UDP permite un monitoreo rápido desde el tablero de control. Con este sistema, buscamos mejorar la operatividad de las máquinas expendedoras y facilitar su mantenimiento preventivo.
+
 
