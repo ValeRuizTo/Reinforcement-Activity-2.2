@@ -22,13 +22,27 @@ Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compat
 - Se implementará para la comunicación rápida y eficiente con el tablero de control.
 - Ideal para la transmisión de datos en redes locales sin necesidad de establecer una conexión permanente.
 
-## Sensores y Simulación en Cisco Packet Tracer
-Dado que Cisco Packet Tracer no cuenta con sensores específicos para peso y voltaje, utilizaremos **potenciómetros** para simular estos valores. También emplearemos el **sensor de temperatura DS18B20** para monitorear la temperatura de las bebidas.
+## Sensores y Proceso de Sensado
+Para lograr una correcta recolección de datos, los sensores están conectados a un **microcontrolador (MCU Board)**, que procesa la información y la envía al servidor. 
 
-### Sensores Implementados
-- **Sensor de Peso (simulado con potenciómetro):** Permite determinar el consumo de productos y verificar la correcta reposición.
-- **Sensor de Voltaje (simulado con potenciómetro):** Detecta cambios bruscos en el suministro eléctrico y registra eventos de picos de voltaje.
-- **Sensor de Temperatura (DS18B20):** Garantiza que las bebidas calientes se sirvan a la temperatura adecuada.
+### Sensores Implementados y Funcionamiento
+- **Sensor de Peso (simulado con potenciómetro):** Se encarga de medir el peso de los productos dentro de la máquina expendedora. La lectura del sensor se compara con valores anteriores para determinar si hubo consumo y garantizar que se realice la reposición adecuada.
+- **Sensor de Voltaje (simulado con potenciómetro):** Detecta fluctuaciones en la corriente eléctrica. Si hay una caída o un pico de voltaje, el sistema lo registra y envía una alerta al servidor para que los técnicos puedan actuar a tiempo.
+- **Sensor de Temperatura (DS18B20):** Controla la temperatura de las bebidas calientes, asegurando que se mantengan dentro de un rango adecuado antes de ser dispensadas. Si la temperatura no está en el umbral correcto, se puede generar una alerta para mantenimiento.
+
+### Microcontrolador (MCU Board)
+- El microcontrolador lee periódicamente los valores de los sensores.
+- Procesa los datos para identificar patrones anómalos.
+- Utiliza Wi-Fi para enviar la información al servidor central mediante MQTT.
+- Puede recibir comandos desde el servidor en caso de ajustes necesarios.
+
+## Comunicación con el Tablero de Control
+Para una supervisión eficiente, el sistema incluye un **tablero de control** que muestra en tiempo real los datos de los sensores y envía alertas cuando sea necesario. 
+
+### Uso de Sockets UDP
+- Se emplea **UDP (User Datagram Protocol)** para la transmisión de datos al tablero de control debido a su baja latencia y eficiencia en entornos de red local.
+- El microcontrolador envía paquetes de datos a una dirección IP específica en la red, donde el tablero de control está ejecutando un servicio que recibe y procesa la información.
+- Como UDP no requiere confirmación de recepción, se implementa un mecanismo de actualización periódica para asegurar que la información se refresque constantemente.
 
 ## Proceso de Validación
 ### Uso de Cisco Packet Tracer
@@ -41,16 +55,10 @@ Para validar nuestra conectividad, seguimos estos pasos en Cisco Packet Tracer:
 ### Desafíos y Soluciones
 - **Configuración de MQTT:** Inicialmente tuvimos dificultades en la configuración del broker MQTT dentro de Cisco Packet Tracer. Solucionamos esto verificando las conexiones y utilizando tópicos adecuados para la transmisión de datos.
 - **Retrasos en la Transmisión de Datos:** Para evitar latencias, optimizamos los parámetros de los sensores y configuramos adecuadamente el tiempo de actualización de los datos.
-
-## Video de Presentación
-Preparamos un video de 5 minutos que muestra:
-- **Explicación del Diseño:** Descripción de los sensores utilizados y su funcionalidad.
-- **Demostración de Validación:** Conexión y pruebas de comunicación en Cisco Packet Tracer.
-- **Conclusiones y Futuras Mejoras:** Posibles mejoras y aprendizajes obtenidos.
+- **Simulación de Sensores:** Dado que Cisco Packet Tracer no tiene sensores de peso y voltaje, usamos potenciómetros para representar sus valores en la simulación.
 
 ## Conclusión
 Este proyecto demuestra la importancia del IoT en la optimización de máquinas expendedoras. A través de una red eficiente y protocolos adecuados, logramos implementar un sistema de monitoreo en tiempo real que mejora la gestión de inventario, asegura la calidad del producto y previene daños por fallas eléctricas. 
 
 Nuestro enfoque en Wi-Fi y MQTT garantiza una comunicación estable y eficiente, mientras que la integración de UDP permite un monitoreo rápido desde el tablero de control. Con este sistema, buscamos mejorar la operatividad de las máquinas expendedoras y facilitar su mantenimiento preventivo.
-```
 
