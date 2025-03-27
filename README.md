@@ -5,6 +5,9 @@
 ## Resumen del Diseño
 En este proyecto, diseñamos y validamos un componente de conectividad para nuestra aplicación IoT enfocada en máquinas expendedoras. Nuestro objetivo es mejorar la gestión y monitoreo de las máquinas mediante sensores que midan el peso del producto, la temperatura de las bebidas y las variaciones de voltaje. Estos datos permiten optimizar la reposición de productos, garantizar la calidad de las bebidas y prevenir daños por picos de energía.
 
+Además, implementamos un **tablero de control** que recibe datos en tiempo real desde los sensores a través de sockets UDP. Este tablero permite visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
+
+
 ## Tipo de Red
 Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compatibilidad con múltiples dispositivos IoT. Esta elección se basa en la existencia de una infraestructura de red estable en el entorno de las máquinas expendedoras, lo que permite la conexión directa de nuestros dispositivos al punto de acceso.
 
