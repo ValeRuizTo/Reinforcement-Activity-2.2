@@ -65,7 +65,7 @@ Para validar nuestra conectividad, seguimos estos pasos en Cisco Packet Tracer:
 ## Imágenes de la Simulación en Cisco Packet Tracer
 A continuación, se presentan imágenes de la simulación realizada en Cisco Packet Tracer:
 
-![Diagrama de Conexión de Dispositivos](ruta_de_la_imagen)
+![.](imagenesWiki/circuito.png)
 
 ![Configuración del Broker MQTT](ruta_de_la_imagen)
 
