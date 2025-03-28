@@ -186,4 +186,6 @@ Este proyecto demuestra la importancia del IoT en la optimización de máquinas 
 
  2: "Packet Tracer 8.2 - IoT devices configuration," Packet Tracer Network. [En línea]. Disponible en: https://www.packettracernetwork.com/internet-of-things/pt7-iot-devices-configuration.html. [Accedido: 27-mar-2025].
 
- 3:
+ 3: "IoT JavaScript API," Documento HTML, GitHub, 2025. Disponible en: https://github.com/ValeRuizTo/Reinforcement-Activity-2.2/blob/main/iot_javascript_api.htm.
+
+
