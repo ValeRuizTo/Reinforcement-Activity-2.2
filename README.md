@@ -181,15 +181,40 @@ La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para 
 Con esta arquitectura, logramos una red eficiente para la gestión y monitoreo de las máquinas expendedoras, asegurando un control óptimo y la prevención de fallos en el sistema. 
 
 
-### Desafíos y Soluciones
+## Pruebas y Validaciones
+
+Para asegurar el correcto funcionamiento de nuestra red IoT en máquinas expendedoras, realizamos diversas pruebas en **Cisco Packet Tracer** para validar la transmisión de datos, la estabilidad de la conexión y la correcta detección de eventos críticos.  
+
+### 1. Pruebas de Conectividad  
+- Verificamos que los dispositivos IoT (sensores, SBC Board, broker MQTT y Tablet-PC) estuvieran correctamente conectados en la red Wi-Fi.  
+- Realizamos pruebas de **ping** entre dispositivos para evaluar la latencia y disponibilidad de conexión.  
+- Se probó la comunicación MQTT, asegurando que los **suscriptores** recibieran datos correctamente desde los **publicadores**.  
+
+###  2. Pruebas de Comunicación MQTT  
+- **Publicación y suscripción:** Evaluamos diferentes tópicos MQTT para garantizar que los mensajes fueran enviados y recibidos sin errores.  
+- **Formatos de datos:** Validamos que los mensajes fueran transmitidos en **JSON** con una estructura clara.  
+
+### 3. Pruebas de Simulación de Sensores  
+Cisco Packet Tracer no cuenta con sensores específicos de **peso y voltaje**, por lo que realizamos las siguientes simulaciones:  
+- **Sensor de peso:** Simulamos variaciones en la carga de productos con un potenciómetro.  
+- **Sensor de voltaje:** Ajustamos manualmente el potenciómetro para simular cambios de voltaje y validar la detección de alertas.  
+- **Sensor de temperatura:** Probamos diferentes rangos y verificamos que los umbrales de alerta se activaran correctamente.  
+
+
+
+
+
+## Desafíos y Soluciones
 - **Configuración de MQTT:** Inicialmente tuvimos dificultades en la configuración del broker MQTT dentro de Cisco Packet Tracer. Solucionamos esto verificando las conexiones y utilizando tópicos adecuados para la transmisión de datos.
 - **Retrasos en la Transmisión de Datos:** Para evitar latencias, optimizamos los parámetros de los sensores y configuramos adecuadamente el tiempo de actualización de los datos.
-- **Simulación de Sensores:** Dado que Cisco Packet Tracer no tiene sensores de peso y voltaje, usamos potenciómetros para representar sus valores en la simulación.
-
-
+- **Simulación de Sensores:** Packet Tracer no incluye sensores de **peso y voltaje**, lo que nos obligó a simularlos con potenciómetros, que aunque funcional, no representa con total precisión el comportamiento de sensores físicos reales.
+- **Limitaciones del Microcontrolador (MCU):** Inicialmente, consideramos usar un MCU Board para procesar y transmitir los datos de los sensores. Sin embargo, nos encontramos con que no soportaba MQTT de manera nativa, lo que implicaba una configuración compleja con librerías adicionales. Para evitar estas complicaciones, decidimos cambiar a un SBC Board, que ofrecía mayor capacidad de procesamiento y compatibilidad con MQTT sin necesidad de configuraciones adicionales.
+  
 ## Conclusión
-Este proyecto demuestra la importancia del IoT en la optimización de máquinas expendedoras. A través de una red eficiente y protocolos adecuados, logramos implementar un sistema de monitoreo en tiempo real que mejora la gestión de inventario, asegura la calidad del producto y previene daños por fallas eléctricas. 
 
+Este proyecto demuestra cómo el uso del protocolo MQTT y una arquitectura IoT bien diseñada pueden optimizar la gestión y monitoreo de máquinas expendedoras. A través de la integración de sensores de peso, temperatura y voltaje con un SBC Board, logramos una comunicación eficiente en tiempo real, permitiendo un control preciso del estado de los productos y la detección temprana de fallos.
+
+El uso de MQTT resultó clave, ya que su bajo consumo de ancho de banda y su comunicación basada en eventos garantizan una transmisión eficiente y fiable de los datos. La implementación en Cisco Packet Tracer nos permitió validar la conectividad y el flujo de información entre dispositivos, aunque enfrentamos desafíos como la falta de sensores específicos, que solucionamos con simulaciones mediante potenciómetros.
 
 
 ## Referencias
