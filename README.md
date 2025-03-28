@@ -5,7 +5,7 @@
 ## Resumen del Diseño
 En este proyecto, diseñamos y validamos un componente de conectividad para nuestra aplicación IoT enfocada en máquinas expendedoras. Nuestro objetivo es mejorar la gestión y monitoreo de las máquinas mediante sensores que midan el peso del producto, la temperatura de las bebidas y las variaciones de voltaje. Estos datos permiten optimizar la reposición de productos, garantizar la calidad de las bebidas y prevenir daños por picos de energía.
 
-Además, implementamos un tablero de control que recibe datos en tiempo real desde los sensores a través del protocolo MQTT. Este tablero permite visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
+Además, implementamos un tablero de control que recibe alertas en tiempo real desde los sensores a través del protocolo MQTT. De igual manera, se implementó el servicio IoT para el monitoreo de los datos en tiempo real. De esta manera, se puede visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
 
 ## Tipo de Red
 Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compatibilidad con múltiples dispositivos IoT. Esta elección se basa en la existencia de una infraestructura de red estable en el entorno de las máquinas expendedoras, lo que permite la conexión directa de nuestros dispositivos al punto de acceso.
@@ -17,9 +17,9 @@ Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compat
 - Facilita la transmisión de datos en tiempo real con un consumo mínimo de ancho de banda.
 - Se utilizará para el envío de datos desde los sensores al servidor central.
 
-- **Publicadores:** Los sensores transmiten datos al servidor.  
+- **Publicadores:** La SBC transmite los datos de los sensores al servidor.  
 - **Broker MQTT:** El servidor recibe y distribuye los datos.  
-- **Suscriptores:** La tablet y otros dispositivos reciben actualizaciones.  
+- **Suscriptores:** La tablet y demás dispositivos reciben actualizaciones.  
 
  **Ventajas:**  
 - Consumo bajo de ancho de banda.  
@@ -69,7 +69,7 @@ Para lograr esta integración, configuramos la API de IoE en Cisco Packet Tracer
 De acuerdo con la documentación de IoE, cada dispositivo define sus estados con propiedades como tipo, unidad de medida y controlabilidad remota. Esto facilita la comunicación eficiente con el servidor y la visualización de datos en tiempo real.[3] El **IoE Client**, implementado en el **SBC Board**, permite una comunicación eficiente con el servidor, asegurando que todos los elementos del sistema trabajen de manera coordinada.
 
 ### Razón por la que no se utilizó un Microcontrolador (MCU)
-Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debido a limitaciones en la implementación del protocolo MQTT. Los microcontroladores, aunque eficientes para tareas específicas de sensado, requieren librerías y configuraciones adicionales para soportar MQTT, lo que complicaba la implementación en nuestro caso. En cambio, el **SBC Board** proporciona mayor capacidad de procesamiento y compatibilidad con herramientas necesarias para la comunicación IoT, incluyendo soporte nativo para MQTT. "una computadoras de placa única (SBC-PT) son tipicamente usados para conectar componentes IOT." [2]
+Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debido a limitaciones en la implementación del protocolo MQTT,asi como la integración con la API IoE de Packet Tracer. Los microcontroladores, aunque eficientes para tareas específicas de sensado, requieren librerías y configuraciones adicionales para soportar MQTT e IoE, lo que complicaba la implementación en nuestro caso. En cambio, el **SBC Board** proporciona mayor capacidad de procesamiento y compatibilidad con herramientas necesarias para la comunicación IoT, incluyendo soporte nativo para MQTT. "una computadoras de placa única (SBC-PT) son tipicamente usados para conectar componentes IOT." [2]
 
 ### Sensores Implementados y Funcionamiento
 - **Sensor de Peso (simulado con potenciómetro):** Se encarga de medir el peso de los productos dentro de la máquina expendedora. La lectura del sensor se compara con valores anteriores para determinar si hubo consumo y garantizar que se realice la reposición adecuada.
@@ -79,8 +79,7 @@ Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debid
 ### Single Board Computer (SBC Board)
 - El SBC Board lee periódicamente los valores de los sensores.
 - Procesa los datos para identificar patrones anómalos.
-- Utiliza Wi-Fi para enviar la información al servidor central mediante MQTT.
-- Puede recibir comandos desde el servidor en caso de ajustes necesarios.
+- Utiliza Wi-Fi para enviar las alertas al servidor central mediante MQTT y los datos en tiempo real al servicio de monitoreo IoT mediante TCP.
 
 ### Comunicación con el Tablero de Control
 Para una supervisión eficiente, el sistema incluye un **tablero de control** que muestra en tiempo real los datos de los sensores y envía alertas cuando sea necesario.
@@ -88,7 +87,7 @@ Para una supervisión eficiente, el sistema incluye un **tablero de control** qu
 Con esta integración de IoE, se optimiza la comunicación y la toma de decisiones en el sistema, mejorando la eficiencia y el mantenimiento preventivo de las máquinas expendedoras.
 
 ### Implementación de MQTT
-Para implementar MQTT en un dispositivo intermediario, en nuestro caso una tablet, es necesario abrir el Administrador de Aplicaciones de Usuario desde el escritorio y esperar a que se cargue completamente. En este punto, se podrá visualizar la aplicación del broker MQTT y la aplicación de cliente MQTT en la interfaz gráfica.
+Para implementar MQTT en un dispositivo intermediario, en nuestro caso un servidor, es necesario abrir el Administrador de Aplicaciones de Usuario desde el escritorio y esperar a que se cargue completamente. En este punto, se podrá visualizar la aplicación del broker MQTT y la aplicación de cliente MQTT en la interfaz gráfica.
 
 "Una vez dentro del Administrador de Aplicaciones de Usuario, se debe seleccionar el broker, hacer clic en "Instalar", cerrar el Administrador y verificar que el icono del MQTT Broker aparezca en el escritorio. Desde allí, es posible iniciarlo y configurar los parámetros necesarios"[4].
 
@@ -96,6 +95,49 @@ Para configurar los clientes MQTT, el procedimiento es similar al del broker, co
 
 Desde este punto, se puede proceder de manera similar a la instalación del broker, con la diferencia de que en este caso se instalará el Cliente MQTT en lugar del servidor【4】.
 
+En este caso, el servidor funciona como Broker MQTT, y los clientes son la tablet y la SBC. En la tablet se observan las alertas en caso de cambios drásticos en la lectura de las variables, mientras que en la SBC se configuró el siguiente script en python para la automatización de la publicación de las alertas.
+
+```
+previous_values = {"A0": None, "A1": None, "Temp": None}
+def map_temperature(value):
+    return (value / 1023.0) * 200 - 100  # Mapea de 0-1023 a -100 a 100
+    
+def mypublish0():
+    global previous_values
+    a = analogRead(0)
+    if previous_values["A0"] is None or abs(a - previous_values["A0"]) > 200:
+        topic = "ControlA0"
+        payload = "ALERTA! La variable A0 cambio su valor drasticamente de " + str(previous_values["A0"]) + " a " + str(a)
+        qos = "1"
+        mqttclient.publish(topic, payload, qos)
+        print payload
+    previous_values["A0"] = a
+
+def mypublish1():
+    global previous_values
+    a = analogRead(1)
+    if previous_values["A1"] is None or abs(a - previous_values["A1"]) > 200:
+        topic = "ControlA1"
+        payload = "ALERTA! La variable A1 cambio su valor drasticamente de " + str(previous_values["A1"]) + " a " + str(a)
+        qos = "1"
+        mqttclient.publish(topic, payload, qos)
+        print payload
+    previous_values["A1"] = a
+
+def mypublishtemp():
+    global previous_values
+    a_raw = analogRead(2)
+    a = map_temperature(a_raw)
+    if previous_values["Temp"] is None or abs(a - previous_values["Temp"]) > 5:
+        topic = "ControlTemp"
+        payload = "ALERTA! La variable Temp cambio su valor drasticamente de " + str(previous_values["Temp"]) + " a " + str(a)
+        qos = "1"
+        mqttclient.publish(topic, payload, qos)
+        print payload
+    previous_values["Temp"] = a
+```
+
+En esta simulación, se realiza una comparación periódica entre el valor actual y el anterior. Se ha definido un umbral de 200 para los potenciómetros y de 3° para la temperatura, con el objetivo de simplificar las pruebas y centrarse en la efectividad de las alertas mediante MQTT. Si la variación supera estos límites, se enviará una notificación a los suscriptores del tópico correspondiente. Para la implementación real, es fundamental analizar las condiciones ambientales y ajustar los umbrales según los requisitos del sistema.
 
 
 ## Proceso de Validación
@@ -132,19 +174,18 @@ A continuación, se presenta una captura de la simulación en Cisco Packet Trace
    - Los **potenciómetros (IoT0 e IoT1)** simulan sensores de peso y voltaje, registrando cambios en los productos disponibles y en la corriente eléctrica.  
    - Estos sensores están conectados a un **SBC Board (Control0)**, que actúa como controlador.  
 
-2. **Transmisión de datos mediante MQTT**  
-   - El SBC Board **publica** los datos de los sensores utilizando el **protocolo MQTT** a través de la **puerta de enlace Wi-Fi (Home Gateway - SLC100)**.  
-   - La puerta de enlace envía estos datos al **servidor central (Server-PT)**, que actúa como el **broker MQTT**.  
-   - El **broker MQTT** recibe los datos y los **distribuye** a los dispositivos suscriptores, como la **Tablet-PC**, que visualiza la información en tiempo real.  
+2. **Transmisión de datos mediante IoT TCP**  
+   - El SBC Board **publica** los datos de los sensores utilizando el **protocolo IoT TCP** a través de la **puerta de enlace Wi-Fi (Home Gateway - SLC100)**.  
+   - La puerta de enlace envía estos datos al **servidor central (Server-PT)**.  
+   - El servidor mediante el servicio IoT recibe los datos y los **monta** en la app de monitoreo, la **Tablet-PC**, que visualiza la información en tiempo real mediante IoT Monitor.  
 
 3. **Interacción con la Tablet-PC**  
    - La **Tablet-PC (Tablet PC0)** está suscrita a los tópicos MQTT del servidor, por lo que **recibe actualizaciones** cuando los sensores detectan cambios.  
    - Si la temperatura de la máquina es demasiado baja o alta, o si hay fluctuaciones de voltaje peligrosas, la tablet **muestra alertas** para que los técnicos puedan intervenir.  
 
 4. **Transmisión de eventos y control del sistema**  
-   - Cuando el SBC Board detecta eventos críticos, como un cambio brusco en el voltaje, puede enviar una alerta utilizando **mensajes MQTT **.  
-   - El servidor puede responder enviando comandos al SBC Board para **activar medidas correctivas**, como apagar el sistema o enviar una notificación de mantenimiento.  
-
+   - Cuando el SBC Board detecta eventos críticos, como un cambio brusco en el voltaje, puede enviar una alerta utilizando **mensajes MQTT **.
+   
 ### Formato de los Mensajes MQTT
 La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para el intercambio de datos. Los mensajes tienen la siguiente estructura:
 
@@ -173,9 +214,9 @@ La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para 
 ###  Resumen del Funcionamiento de la Red  
 
 - **Sensores** → Recogen datos y los envían al SBC Board.  
-- **SBC Board (Control0)** → Publica datos mediante MQTT a través del Home Gateway.  
+- **SBC Board (Control0)** → Publica alertas mediante MQTT y datos mediante TCP a través del Home Gateway.  
 - **Home Gateway (SLC100)** → Transmite los datos al servidor central.  
-- **Servidor (Server-PT)** → Actúa como el broker MQTT y distribuye los datos.  
+- **Servidor (Server-PT)** → Actúa como el broker MQTT y servicio IoT para las distribución de datos.  
 - **Tablet-PC** → Se suscribe a los datos y permite monitorear el sistema en tiempo real.  
 
 Con esta arquitectura, logramos una red eficiente para la gestión y monitoreo de las máquinas expendedoras, asegurando un control óptimo y la prevención de fallos en el sistema. 
@@ -188,7 +229,8 @@ Para asegurar el correcto funcionamiento de nuestra red IoT en máquinas expende
 ### 1. Pruebas de Conectividad  
 - Verificamos que los dispositivos IoT (sensores, SBC Board, broker MQTT y Tablet-PC) estuvieran correctamente conectados en la red Wi-Fi.  
 - Realizamos pruebas de **ping** entre dispositivos para evaluar la latencia y disponibilidad de conexión.  
-- Se probó la comunicación MQTT, asegurando que los **suscriptores** recibieran datos correctamente desde los **publicadores**.  
+- Se probó la comunicación MQTT, asegurando que los **suscriptores** recibieran datos correctamente desde los **publicadores**.
+- Se probó el funcionamiento del servicio y monitor Iot, cambiando el valor de los potenciómetros y viendo los cambios en tiempo real.
 
 ###  2. Pruebas de Comunicación MQTT  
 - **Publicación y suscripción:** Evaluamos diferentes tópicos MQTT para garantizar que los mensajes fueran enviados y recibidos sin errores.  
