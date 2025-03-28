@@ -5,35 +5,76 @@
 ## Resumen del Diseño
 En este proyecto, diseñamos y validamos un componente de conectividad para nuestra aplicación IoT enfocada en máquinas expendedoras. Nuestro objetivo es mejorar la gestión y monitoreo de las máquinas mediante sensores que midan el peso del producto, la temperatura de las bebidas y las variaciones de voltaje. Estos datos permiten optimizar la reposición de productos, garantizar la calidad de las bebidas y prevenir daños por picos de energía.
 
-Además, implementamos un **tablero de control** que recibe datos en tiempo real desde los sensores a través de sockets UDP. Este tablero permite visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
+Además, implementamos un tablero de control que recibe datos en tiempo real desde los sensores a través del protocolo MQTT. Este tablero permite visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
 
 ## Tipo de Red
 Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compatibilidad con múltiples dispositivos IoT. Esta elección se basa en la existencia de una infraestructura de red estable en el entorno de las máquinas expendedoras, lo que permite la conexión directa de nuestros dispositivos al punto de acceso.
 
 ## Protocolos Utilizados
+
 ### MQTT (Message Queuing Telemetry Transport)
 - Protocolo ligero y eficiente, ideal para la comunicación entre dispositivos IoT.
 - Facilita la transmisión de datos en tiempo real con un consumo mínimo de ancho de banda.
 - Se utilizará para el envío de datos desde los sensores al servidor central.
 
-### HTTP
-- Utilizado para la comunicación con la interfaz web.
-- Permite la visualización remota de los datos recopilados por los sensores.
+- **Publicadores:** Los sensores transmiten datos al servidor.  
+- **Broker MQTT:** El servidor recibe y distribuye los datos.  
+- **Suscriptores:** La tablet y otros dispositivos reciben actualizaciones.  
 
-### UDP (User Datagram Protocol)
-- Se implementará para la comunicación rápida y eficiente con el tablero de control.
-- Ideal para la transmisión de datos en redes locales sin necesidad de establecer una conexión permanente.
+ **Ventajas:**  
+- Consumo bajo de ancho de banda.  
+- Eficiencia en la transmisión de datos en redes IoT.  
+- Comunicación basada en eventos (solo se envían datos cuando hay cambios).  
+
+###  TCP (Transmission Control Protocol)  
+ **Función:** Se usa para la comunicación confiable entre el servidor y los dispositivos IoT.  
+
+- **Se usa cuando es necesario asegurar que los datos lleguen correctamente.**  
+- **Requiere una conexión establecida antes de la transmisión de datos.**  
+
+ **Ventajas:**  
+- Garantiza que los mensajes lleguen sin errores y en orden.  
+- Es útil para la configuración de dispositivos y transmisión de comandos críticos.  
+
+### **STP (Spanning Tree Protocol)**
+- Protocolo utilizado para evitar **bucles en la red** cuando hay múltiples caminos de conexión.
+- Se encarga de deshabilitar enlaces redundantes y solo activa rutas seguras para la comunicación.
+
+#### **Funcionamiento en la simulación:**
+- Se usa en la red de la simulación para **evitar bucles** en la comunicación entre el servidor, la pasarela (gateway) y los dispositivos IoT.  
+- Si hay múltiples caminos entre dispositivos, STP selecciona **el mejor camino** y bloquea los enlaces redundantes.  
+- Permite la **recuperación automática** en caso de que un enlace principal falle.  
+
+#### **Ventajas:**
+- Evita colisiones y congestión en la red.  
+- Mejora la estabilidad y confiabilidad de la comunicación en IoT.  
+- Permite una **red dinámica y adaptable** en caso de fallos.  
 
 ## Sensores y Proceso de Sensado
 Para lograr una correcta recolección de datos, los sensores están conectados a un **Single Board Computer (SBC Board)**, que procesa la información y la envía al servidor. 
 
+### Internet of Everything (IoE)
+El **Internet of Everything (IoE)** amplía el concepto de IoT al conectar no solo dispositivos, sino también **personas, procesos y datos** en una red inteligente. En nuestro proyecto, el uso de IoE se refleja en:
+- La interconexión entre sensores, SBC Board y el servidor a través de MQTT.
+- La integración del tablero de control para el monitoreo en tiempo real.
+- La toma de decisiones automatizadas en función de los datos recibidos.
+
+Para lograr esta integración, configuramos la API de IoE en Cisco Packet Tracer, lo que permite:
+
+- Definir el tipo de dispositivo en la red.
+- Gestionar los estados de los sensores (peso, temperatura, voltaje).
+- Establecer unidades de medida y conversiones.
+- Permitir el control remoto desde el servidor IoE.
+
+De acuerdo con la documentación de IoE, cada dispositivo define sus estados con propiedades como tipo, unidad de medida y controlabilidad remota. Esto facilita la comunicación eficiente con el servidor y la visualización de datos en tiempo real.[3] El **IoE Client**, implementado en el **SBC Board**, permite una comunicación eficiente con el servidor, asegurando que todos los elementos del sistema trabajen de manera coordinada.
+
 ### Razón por la que no se utilizó un Microcontrolador (MCU)
-Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debido a limitaciones en la implementación del protocolo MQTT. Los microcontroladores, aunque eficientes para tareas específicas de sensado, requieren librerías y configuraciones adicionales para soportar MQTT, lo que complicaba la implementación en nuestro caso. En cambio, el **SBC Board** proporciona mayor capacidad de procesamiento y compatibilidad con herramientas necesarias para la comunicación IoT, incluyendo soporte nativo para MQTT.
+Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debido a limitaciones en la implementación del protocolo MQTT. Los microcontroladores, aunque eficientes para tareas específicas de sensado, requieren librerías y configuraciones adicionales para soportar MQTT, lo que complicaba la implementación en nuestro caso. En cambio, el **SBC Board** proporciona mayor capacidad de procesamiento y compatibilidad con herramientas necesarias para la comunicación IoT, incluyendo soporte nativo para MQTT. "una computadoras de placa única (SBC-PT) son tipicamente usados para conectar componentes IOT." [2]
 
 ### Sensores Implementados y Funcionamiento
 - **Sensor de Peso (simulado con potenciómetro):** Se encarga de medir el peso de los productos dentro de la máquina expendedora. La lectura del sensor se compara con valores anteriores para determinar si hubo consumo y garantizar que se realice la reposición adecuada.
 - **Sensor de Voltaje (simulado con potenciómetro):** Detecta fluctuaciones en la corriente eléctrica. Si hay una caída o un pico de voltaje, el sistema lo registra y envía una alerta al servidor para que los técnicos puedan actuar a tiempo.
-- **Sensor de Temperatura (DS18B20):** Controla la temperatura de las bebidas calientes, asegurando que se mantengan dentro de un rango adecuado antes de ser dispensadas. Si la temperatura no está en el umbral correcto, se puede generar una alerta para mantenimiento.
+- **Sensor de Temperatura ():** Controla la temperatura de las bebidas calientes, asegurando que se mantengan dentro de un rango adecuado antes de ser dispensadas. Si la temperatura no está en el umbral correcto, se puede generar una alerta para mantenimiento.
 
 ### Single Board Computer (SBC Board)
 - El SBC Board lee periódicamente los valores de los sensores.
@@ -42,12 +83,9 @@ Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debid
 - Puede recibir comandos desde el servidor en caso de ajustes necesarios.
 
 ## Comunicación con el Tablero de Control
-Para una supervisión eficiente, el sistema incluye un **tablero de control** que muestra en tiempo real los datos de los sensores y envía alertas cuando sea necesario. 
+Para una supervisión eficiente, el sistema incluye un **tablero de control** que muestra en tiempo real los datos de los sensores y envía alertas cuando sea necesario.
 
-### Uso de Sockets UDP
-- Se emplea **UDP (User Datagram Protocol)** para la transmisión de datos al tablero de control debido a su baja latencia y eficiencia en entornos de red local.
-- El SBC Board envía paquetes de datos a una dirección IP específica en la red, donde el tablero de control está ejecutando un servicio que recibe y procesa la información.
-- Como UDP no requiere confirmación de recepción, se implementa un mecanismo de actualización periódica para asegurar que la información se refresque constantemente.
+Con esta integración de IoE, se optimiza la comunicación y la toma de decisiones en el sistema, mejorando la eficiencia y el mantenimiento preventivo de las máquinas expendedoras.
 
 ## Proceso de Validación
 ### Uso de Cisco Packet Tracer
@@ -93,7 +131,7 @@ A continuación, se presenta una captura de la simulación en Cisco Packet Trace
    - Si la temperatura de la máquina es demasiado baja o alta, o si hay fluctuaciones de voltaje peligrosas, la tablet **muestra alertas** para que los técnicos puedan intervenir.  
 
 4. **Transmisión de eventos y control del sistema**  
-   - Cuando el SBC Board detecta eventos críticos, como un cambio brusco en el voltaje, puede enviar una alerta utilizando **mensajes MQTT o paquetes TCP/UDP**.  
+   - Cuando el SBC Board detecta eventos críticos, como un cambio brusco en el voltaje, puede enviar una alerta utilizando **mensajes MQTT **.  
    - El servidor puede responder enviando comandos al SBC Board para **activar medidas correctivas**, como apagar el sistema o enviar una notificación de mantenimiento.  
 
 ### Formato de los Mensajes MQTT
@@ -118,42 +156,7 @@ La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para 
 - Luego, la variable A1 cambió de 0 a 534, lo que podría significar un ajuste en otro sensor.
 
 - Finalmente, A0 cambió nuevamente de 1023 a 558, indicando otra variación significativa.
-- 
-### Protocolos Utilizados en la Simulación  
-
-####  MQTT (Message Queuing Telemetry Transport)  
- **Función:** Permite la comunicación eficiente entre dispositivos IoT y el servidor.  
-
-- **Publicadores:** Los sensores transmiten datos al servidor.  
-- **Broker MQTT:** El servidor recibe y distribuye los datos.  
-- **Suscriptores:** La tablet y otros dispositivos reciben actualizaciones.  
-
- **Ventajas:**  
-- Consumo bajo de ancho de banda.  
-- Eficiencia en la transmisión de datos en redes IoT.  
-- Comunicación basada en eventos (solo se envían datos cuando hay cambios).  
-
-
-####  TCP (Transmission Control Protocol)  
- **Función:** Se usa para la comunicación confiable entre el servidor y los dispositivos IoT.  
-
-- **Se usa cuando es necesario asegurar que los datos lleguen correctamente.**  
-- **Requiere una conexión establecida antes de la transmisión de datos.**  
-
- **Ventajas:**  
-- Garantiza que los mensajes lleguen sin errores y en orden.  
-- Es útil para la configuración de dispositivos y transmisión de comandos críticos.  
-
-#### 🟣 UDP (User Datagram Protocol)  
- **Función:** Se usa para la comunicación rápida con el tablero de control.  
-
-- **No establece una conexión permanente, sino que envía datos de manera inmediata.**  
-- **El SBC Board transmite datos directamente a la dirección IP del servidor sin esperar confirmación.**  
-
- **Ventajas:**  
-- Baja latencia y transmisión rápida.  
-- Ideal para monitoreo en tiempo real.  
-
+  
 
 
 ###  Resumen del Funcionamiento de la Red  
@@ -172,18 +175,15 @@ Con esta arquitectura, logramos una red eficiente para la gestión y monitoreo d
 - **Retrasos en la Transmisión de Datos:** Para evitar latencias, optimizamos los parámetros de los sensores y configuramos adecuadamente el tiempo de actualización de los datos.
 - **Simulación de Sensores:** Dado que Cisco Packet Tracer no tiene sensores de peso y voltaje, usamos potenciómetros para representar sus valores en la simulación.
 
-## Imágenes de la Simulación en Cisco Packet Tracer
-A continuación, se presentan imágenes de la simulación realizada en Cisco Packet Tracer:
-
-![Diagrama de Conexión de Dispositivos](ruta_de_la_imagen)
-
-![Configuración del Broker MQTT](ruta_de_la_imagen)
-
-![Prueba de Comunicación entre Sensores y Servidor](ruta_de_la_imagen)
 
 ## Conclusión
 Este proyecto demuestra la importancia del IoT en la optimización de máquinas expendedoras. A través de una red eficiente y protocolos adecuados, logramos implementar un sistema de monitoreo en tiempo real que mejora la gestión de inventario, asegura la calidad del producto y previene daños por fallas eléctricas. 
 
-Nuestro enfoque en Wi-Fi y MQTT garantiza una comunicación estable y eficiente, mientras que la integración de UDP permite un monitoreo rápido desde el tablero de control. Con este sistema, buscamos mejorar la operatividad de las máquinas expendedoras y facilitar su mantenimiento preventivo.
 
 
+## Referencias
+ 1: "MCU & SBC programming for smart IoT devices: Using Cisco Packet Tracer," YouTube, 4.8 años atrás. [En línea]. Disponible en: https://www.youtube.com/watch?v=TgiaVUIxwd8
+
+ 2: "Packet Tracer 8.2 - IoT devices configuration," Packet Tracer Network. [En línea]. Disponible en: https://www.packettracernetwork.com/internet-of-things/pt7-iot-devices-configuration.html. [Accedido: 27-mar-2025].
+
+ 3:
