@@ -70,7 +70,7 @@ El siguiente diagrama representa la implementación de nuestra solución IoT en 
 - **Sensores:**
   - **Sensor de Temperatura (IoT2)**: Mide la temperatura de las bebidas y envía datos al SBC Board.
   - **Potenciómetros (IoT0, IoT1)**: Simulan los valores de peso y voltaje debido a la falta de sensores específicos en Packet Tracer.
-  - 
+    
 ### Simulación en Cisco Packet Tracer y funcionamiento
 A continuación, se presenta una captura de la simulación en Cisco Packet Tracer:
 
@@ -98,6 +98,7 @@ A continuación, se presenta una captura de la simulación en Cisco Packet Trace
 
 ### Formato de los Mensajes MQTT
 La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para el intercambio de datos. Los mensajes tienen la siguiente estructura:
+
           {
             "topic": "ControlIA0",
             "payload": "¡ALERTA! La variable A0 cambió su valor drásticamente de 0 a 1023"
@@ -107,7 +108,8 @@ La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para 
 
 - "topic" → Define la categoría o canal donde se publica el mensaje. En este caso, "ControlIA0", que representa un sensor o grupo de sensores.
 
-- "payload" → Contiene la información transmitida. Aquí se reporta que la variable "A0" sufrió un cambio brusco en su valo
+- "payload" → Contiene la información transmitida. Aquí se reporta que la variable "A0" sufrió un cambio brusco en su valor
+  
 ![.](imagenesWiki/mqtt2.jpg)
 
 ***Análisis de los Mensajes Recibidos***
