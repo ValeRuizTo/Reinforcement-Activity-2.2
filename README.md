@@ -27,7 +27,7 @@ Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compat
 - Comunicación basada en eventos (solo se envían datos cuando hay cambios).  
 
 ###  TCP (Transmission Control Protocol)  
- **Función:** Se usa para la comunicación confiable entre el servidor y los dispositivos IoT.  
+ **Función:** Se usa para la comunicación confiable de los datos entre el servidor y los dispositivos IoT.  
 
 - **Se usa cuando es necesario asegurar que los datos lleguen correctamente.**  
 - **Requiere una conexión establecida antes de la transmisión de datos.**  
