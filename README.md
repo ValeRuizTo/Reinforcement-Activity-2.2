@@ -82,10 +82,21 @@ Inicialmente, consideramos el uso de un **MCU Board**, pero lo descartamos debid
 - Utiliza Wi-Fi para enviar la información al servidor central mediante MQTT.
 - Puede recibir comandos desde el servidor en caso de ajustes necesarios.
 
-## Comunicación con el Tablero de Control
+### Comunicación con el Tablero de Control
 Para una supervisión eficiente, el sistema incluye un **tablero de control** que muestra en tiempo real los datos de los sensores y envía alertas cuando sea necesario.
 
 Con esta integración de IoE, se optimiza la comunicación y la toma de decisiones en el sistema, mejorando la eficiencia y el mantenimiento preventivo de las máquinas expendedoras.
+
+### Implementación de MQTT
+Para implementar MQTT en un dispositivo intermediario, en nuestro caso una tablet, es necesario abrir el Administrador de Aplicaciones de Usuario desde el escritorio y esperar a que se cargue completamente. En este punto, se podrá visualizar la aplicación del broker MQTT y la aplicación de cliente MQTT en la interfaz gráfica.
+
+"Una vez dentro del Administrador de Aplicaciones de Usuario, se debe seleccionar el broker, hacer clic en "Instalar", cerrar el Administrador y verificar que el icono del MQTT Broker aparezca en el escritorio. Desde allí, es posible iniciarlo y configurar los parámetros necesarios"[4].
+
+Para configurar los clientes MQTT, el procedimiento es similar al del broker, con algunas diferencias en los pasos previos. Al acceder a la configuración del dispositivo IoT, por defecto no se mostrará el escritorio en la interfaz. "Para habilitarlo, es necesario hacer clic en el botón "Avanzado" y cambiar el modo de visualización. Luego, en la pestaña Configuración de E/S, se debe marcar la opción Escritorio, lo que habilitará una nueva pestaña del mismo nombre en la barra de navegación superior"[4].
+
+Desde este punto, se puede proceder de manera similar a la instalación del broker, con la diferencia de que en este caso se instalará el Cliente MQTT en lugar del servidor【4】.
+
+
 
 ## Proceso de Validación
 ### Uso de Cisco Packet Tracer
@@ -188,4 +199,6 @@ Este proyecto demuestra la importancia del IoT en la optimización de máquinas 
 
  3: "IoT JavaScript API," Documento HTML, GitHub, 2025. Disponible en: https://github.com/ValeRuizTo/Reinforcement-Activity-2.2/blob/main/iot_javascript_api.htm.
 
+ 4: A. S., "How to set up an MQTT broker and clients in Cisco Packet Tracer," Medium, 2022. Disponible en: https://anna-s.medium.com/how-to-set-up-an-mqtt-broker-and-clients-in-cisco-packet-tracer-4f63c9e3661b.
 
+ 5: JohnSmith, "Setting Up an MQTT Broker. Part 2: IoT, Home Automation," Instructables, 2016. Disponible en: https://www.instructables.com/Setting-Up-an-MQTT-Broker-Part-2-IoT-Home-Automati/
