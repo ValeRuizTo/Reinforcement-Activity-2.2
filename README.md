@@ -8,7 +8,14 @@ En este proyecto, diseñamos y validamos un componente de conectividad para nues
 Además, implementamos un tablero de control que recibe alertas en tiempo real desde los sensores a través del protocolo MQTT. De igual manera, se implementó el servicio IoT para el monitoreo de los datos en tiempo real. De esta manera, se puede visualizar información clave sobre el estado de la máquina expendedora y genera alertas en caso de eventos críticos, facilitando la supervisión y el mantenimiento preventivo.
 
 ## Tipo de Red
-Seleccionamos **Wi-Fi** como la red principal debido a su accesibilidad y compatibilidad con múltiples dispositivos IoT. Esta elección se basa en la existencia de una infraestructura de red estable en el entorno de las máquinas expendedoras, lo que permite la conexión directa de nuestros dispositivos al punto de acceso.
+
+Seleccionamos **Wi-Fi** como la red principal para la conectividad de nuestras máquinas expendedoras inteligentes debido a su accesibilidad, costo y compatibilidad con múltiples dispositivos IoT. La infraestructura existente en la universidad garantiza una conexión estable a internet y acceso a energía eléctrica, eliminando la necesidad de instalar redes adicionales o depender de servicios celulares costosos.
+
+De acuerdo con el artículo consultado, la elección entre redes celulares y Wi-Fi depende del entorno de implementación y los requisitos de conectividad. Si bien las redes celulares ofrecen mayor cobertura y movilidad, Wi-Fi resulta más rentable y adecuado para aplicaciones localizadas, como en nuestro caso, donde las máquinas expendedoras están en un espacio fijo con acceso a una infraestructura estable de red y energía [6].
+
+Además, el artículo menciona que Wi-Fi es ideal para dispositivos IoT en ubicaciones fijas, como almacenes o equipos industriales, lo que refuerza nuestra elección para las máquinas expendedoras inteligentes. Dado que la universidad ya cuenta con puntos de acceso Wi-Fi, esta opción permite la conexión directa de los dispositivos sin incurrir en costos adicionales por certificaciones o planes de datos móviles, según Eseye "Wi-Fi offers fewer benefits in terms of mobility as the IoT devices will require additional infrastructure such as routers, gateways, or repeaters, that would all need to be pre-configured"[6].
+
+En conclusión, la infraestructura preexistente dentro del campus universitario facilita la implementación de Wi-Fi como la mejor opción para nuestras máquinas expendedoras inteligentes, garantizando estabilidad, eficiencia de costos y compatibilidad con la red actual.
 
 ## Protocolos Utilizados
 
@@ -269,3 +276,5 @@ El uso de MQTT resultó clave, ya que su bajo consumo de ancho de banda y su com
  4: A. S., "How to set up an MQTT broker and clients in Cisco Packet Tracer," Medium, 2022. Disponible en: https://anna-s.medium.com/how-to-set-up-an-mqtt-broker-and-clients-in-cisco-packet-tracer-4f63c9e3661b.
 
  5: JohnSmith, "Setting Up an MQTT Broker. Part 2: IoT, Home Automation," Instructables, 2016. Disponible en: https://www.instructables.com/Setting-Up-an-MQTT-Broker-Part-2-IoT-Home-Automati/
+
+ 6: Eseye, "Cellular vs WiFi for IoT: Choosing the Best Connectivity Option," [En línea]. Disponible en: https://www.eseye.com/resources/iot-explained/cellular-vs-wifi-for-iot-choosing-the-best-connectivity-option.
