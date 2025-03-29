@@ -17,6 +17,35 @@ Además, el artículo menciona que Wi-Fi es ideal para dispositivos IoT en ubica
 
 La infraestructura preexistente dentro del campus universitario facilita la implementación de Wi-Fi como la mejor opción para nuestras máquinas expendedoras inteligentes, garantizando estabilidad, eficiencia de costos y compatibilidad con la red actual.
 
+
+## Requisitos del Sistema
+
+#### ***Requisitos Funcionales***  
+1. **Conectividad IoT**: La máquina expendedora debe conectarse a una red mediante Wi-Fi para transmitir y recibir datos en tiempo real.  
+2. **Protocolo de Comunicación**: El sistema debe utilizar MQTT para la comunicación eficiente entre dispositivos y servidores.  
+3. **Monitoreo Remoto**: Se debe permitir el monitoreo en tiempo real de los sensores instalados en la máquina (temperatura, stock, estado de funcionamiento).  
+4. **Gestión de Dispositivos**: El sistema debe permitir la administración remota de la máquina, incluyendo actualizaciones de firmware y control de disponibilidad de productos.  
+5. **Registro de Datos**: Debe almacenarse un historial de datos sobre el funcionamiento de la máquina y el estado del inventario.  
+6. **Seguridad**: La comunicación debe estar protegida mediante cifrado y autenticación para evitar accesos no autorizados.  
+7. **Interfaz de Usuario**: Debe existir una interfaz gráfica para que los administradores puedan visualizar la información de las máquinas.  
+
+#### ***Requisitos No Funcionales***  
+1. **Disponibilidad**: El sistema debe garantizar una disponibilidad del 99% para asegurar el funcionamiento ininterrumpido de la máquina.  
+2. **Escalabilidad**: Debe permitir la integración de múltiples máquinas en la misma red sin afectar el rendimiento.  
+3. **Eficiencia Energética**: Los sensores y módulos de comunicación deben consumir poca energía para prolongar la vida útil de la máquina.  
+4. **Interoperabilidad**: Compatible con diferentes tipos de sensores y sistemas de gestión remota.  
+5. **Baja Latencia**: El tiempo de respuesta entre la solicitud y la respuesta del sistema no debe superar los 500 ms.  
+
+### *Restricciones del Sistema*  
+
+1. **Limitaciones de Hardware**: El sistema debe operar con los sensores y módulos disponibles en el mercado, sin requerir componentes personalizados costosos.  
+2. **Infraestructura de Red**: Depende de la disponibilidad de redes Wi-Fi estables en las ubicaciones donde se instalen las máquinas expendedoras.  
+3. **Consumo de Datos**: La comunicación debe ser eficiente en términos de datos para minimizar costos de conectividad.  
+4. **Seguridad y Regulaciones**: Debe cumplir con normativas de seguridad y privacidad de datos, como GDPR o normativas locales.  
+5. **Capacidad de Almacenamiento**: La memoria de la máquina para almacenar datos localmente es limitada, por lo que debe priorizarse el envío de datos al servidor.  
+6. **Costo de Implementación**: El diseño debe ser viable económicamente para que la integración del IoT en las máquinas sea rentable.  
+7. **Compatibilidad con Cisco Packet Tracer**: La simulación y validación deben realizarse en Cisco Packet Tracer, lo que puede limitar algunos aspectos del diseño.
+
 ## Protocolos Utilizados
 
 ### MQTT (Message Queuing Telemetry Transport)
