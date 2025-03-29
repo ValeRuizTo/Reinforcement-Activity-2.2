@@ -229,6 +229,121 @@ La Tablet-PC muestra mensajes en formato JSON, que es el estándar en MQTT para 
 Con esta arquitectura, logramos una red eficiente para la gestión y monitoreo de las máquinas expendedoras, asegurando un control óptimo y la prevención de fallos en el sistema. 
 
 
+## Código para Obtener y Reportar Datos de Sensores al IoT Monitor
+
+
+Este programa está diseñado para leer datos de tres sensores (dos potenciómetros que simulan sensores de voltaje y un sensor de temperatura), procesarlos y enviarlos al **IoT Monitor** utilizando la API **IoE (Internet of Everything)** de **Packet Tracer**.  
+
+El código configura los pines de entrada, define los estados de los sensores, mapea los valores de temperatura y reporta los datos periódicamente.
+
+
+####  **Entorno**
+- **Dispositivo:** SBC Board (**Control0**)  
+- **Lenguaje:** JavaScript (usado por la API IoE en Packet Tracer)  
+
+#### **Sensores Simulados**
+1. **Sensor A0** (*Potenciómetro IoT0*): Simula un sensor de voltaje.  
+2. **Sensor A1** (*Potenciómetro IoT1*): Simula otro sensor de voltaje.  
+3. **Sensor A2** (*Temperature Sensor IoT2*): Simula un sensor de temperatura.  
+
+
+#### **Funcionalidad Principal**
+- **Configuración de Pines:** Se establecen los pines de entrada para leer valores analógicos de los sensores.  
+- **Definición de Estados:** Se asignan los valores de voltajes y temperatura mediante la API IoE.  
+- **Lectura de Sensores:** Se obtienen los valores de los sensores en tiempo real.  
+- **Mapeo de Temperatura:** Se transforma el valor del sensor de temperatura a un rango de **-100°C a 100°C**.  
+- **Reporte Periódico:** Se envían los datos al **IoT Monitor** cada segundo.  
+
+                    // Configuración inicial del programa
+                    function setup() {
+                        // Configurar los pines 0, 1 y 2 como entradas para leer los sensores
+                        pinMode(0, INPUT);  // Sensor A0 (Potenciómetro IoT0 - Voltaje)
+                        pinMode(1, INPUT);  // Sensor A1 (Potenciómetro IoT1 - Voltaje)
+                        pinMode(2, INPUT);  // Sensor A2 (Temperature Sensor IoT2 - Temperatura)
+                        
+                        // Configuración del IoT Client usando la API IoE
+                        IoEClient.setup({
+                            type: "SensorBoard",  // Tipo de dispositivo
+                            states: [  // Definición de los estados de los sensores
+                                { name: "Sensor A0", type: "number", unit: "V" },  // Voltaje en A0
+                                { name: "Sensor A1", type: "number", unit: "V" },  // Voltaje en A1
+                                { 
+                                    name: "Temperatura", 
+                                    type: "number", 
+                                    unit: "°C",  // Unidad métrica
+                                    imperialUnit: "°F",  // Unidad imperial
+                                    toImperialConversion: "x * 1.8 + 32",  // Conversión a °F
+                                    toMetricConversion: "(x - 32) / 1.8",  // Conversión a °C
+                                    decimalDigits: 1  // Un decimal para la temperatura
+                                }
+                            ]
+                        });
+                    }
+                    
+                    // Bucle principal que se ejecuta continuamente
+                    function loop() {
+                        // Leer los valores analógicos de los sensores (rango: 0 a 1023)
+                        var valorA0 = analogRead(0);  // Valor del sensor A0 (Voltaje)
+                        var valorA1 = analogRead(1);  // Valor del sensor A1 (Voltaje)
+                        var valorA2 = analogRead(2);  // Valor del sensor A2 (Temperatura)
+                    
+                        // Convertir el valor de A2 (0-1023) a un rango de temperatura (-100°C a 100°C)
+                        var temperatura = map(valorA2, 0, 1023, -100, 100);
+                    
+                        // Crear un arreglo con los datos de los sensores
+                        var data = [valorA0, valorA1, temperatura];
+                    
+                        // Enviar los datos al IoT Monitor usando la API IoE
+                        IoEClient.reportStates(data);
+                    
+                        // Imprimir los datos enviados en la consola serial para depuración
+                        Serial.println("Datos enviados: " + data.join(", "));
+                    
+                        // Esperar 1 segundo antes de la próxima lectura
+                        delay(1000);
+                    }
+                    
+                    // Función auxiliar para mapear un valor de un rango a otro
+                    function map(x, in_min, in_max, out_min, out_max) {
+                        // Fórmula de mapeo: (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+                    }
+                    
+
+
+
+### Explicación del Código
+
+#### **Función `setup()`**
+1. **Configuración de Pines**  
+   - Los pines **0, 1 y 2** se configuran como **entradas** para leer los valores analógicos de los sensores.  
+2. **Configuración del IoT Client**  
+   - Se usa `IoEClient.setup()` para definir el tipo de dispositivo (**SensorBoard**) y los estados de los sensores:
+     - **Sensor A0 y A1:** Representan **voltajes** (en voltios, `"V"`).
+     - **Sensor A2 (Temperatura):** Representa la **temperatura** en °C, con conversión a °F para sistemas imperiales.  
+     - Se especifica que los valores tendrán **un decimal** para mayor precisión.  
+
+#### **Función `loop()`**
+1. **Lectura de Sensores**  
+   - Se obtienen los valores **analógicos** (rango **0 a 1023**) de los pines **0, 1 y 2** con `analogRead()`.  
+2. **Mapeo de Temperatura**  
+   - Se convierte el valor del **sensor A2** (**0 a 1023**) a un rango de **-100°C a 100°C** usando la función `map()`.  
+3. **Reporte de Datos**  
+   - Se crea un **arreglo** con los valores de los sensores (**valorA0, valorA1, temperatura**) y se envía al **IoT Monitor** con `IoEClient.reportStates()`.  
+4. **Depuración**  
+   - Se imprimen los datos enviados en la **consola serial** para monitoreo y verificación.  
+5. **Retardo**  
+   - Se espera **1 segundo** (`delay(1000)`) antes de la próxima iteración.  
+
+
+#### **Función `map()`**
+- **Propósito:**  
+  - Es una **función auxiliar** que mapea un valor de **un rango a otro**.  
+- **Uso en el Código:**  
+  - Convierte el valor del **sensor de temperatura** (**0 a 1023**) a un rango de **-100°C a 100°C**.  
+
+El programa se ejecuta en un bucle infinito: lee los sensores, procesa los datos (mapea la temperatura), los envía al IoT Monitor y espera 1 segundo antes de repetir el proceso.
+
 ## Pruebas y Validaciones
 
 Para asegurar el correcto funcionamiento de nuestra red IoT en máquinas expendedoras, realizamos diversas pruebas en **Cisco Packet Tracer** para validar la transmisión de datos, la estabilidad de la conexión y la correcta detección de eventos críticos.  
