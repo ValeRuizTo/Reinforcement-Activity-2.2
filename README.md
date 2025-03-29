@@ -26,8 +26,7 @@ La infraestructura preexistente dentro del campus universitario facilita la impl
 3. **Monitoreo Remoto**: Se debe permitir el monitoreo en tiempo real de los sensores instalados en la máquina (temperatura, stock, estado de funcionamiento).  
 4. **Gestión de Dispositivos**: El sistema debe permitir la administración remota de la máquina, incluyendo actualizaciones de firmware y control de disponibilidad de productos.  
 5. **Registro de Datos**: Debe almacenarse un historial de datos sobre el funcionamiento de la máquina y el estado del inventario.  
-6. **Seguridad**: La comunicación debe estar protegida mediante cifrado y autenticación para evitar accesos no autorizados.  
-7. **Interfaz de Usuario**: Debe existir una interfaz gráfica para que los administradores puedan visualizar la información de las máquinas.  
+6. **Interfaz de Usuario**: Debe existir una interfaz gráfica para que los administradores puedan visualizar la información de las máquinas.  
 
 #### ***Requisitos No Funcionales***  
 1. **Disponibilidad**: El sistema debe garantizar una disponibilidad del 99% para asegurar el funcionamiento ininterrumpido de la máquina.  
@@ -35,6 +34,7 @@ La infraestructura preexistente dentro del campus universitario facilita la impl
 3. **Eficiencia Energética**: Los sensores y módulos de comunicación deben consumir poca energía para prolongar la vida útil de la máquina.  
 4. **Interoperabilidad**: Compatible con diferentes tipos de sensores y sistemas de gestión remota.  
 5. **Baja Latencia**: El tiempo de respuesta entre la solicitud y la respuesta del sistema no debe superar los 500 ms.  
+6. **Seguridad**: La comunicación debe estar protegida mediante cifrado y autenticación para evitar accesos no autorizados.  
 
 ### *Restricciones del Sistema*  
 
