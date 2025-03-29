@@ -254,61 +254,61 @@ El código configura los pines de entrada, define los estados de los sensores, m
 - **Mapeo de Temperatura:** Se transforma el valor del sensor de temperatura a un rango de **-100°C a 100°C**.  
 - **Reporte Periódico:** Se envían los datos al **IoT Monitor** cada segundo.  
 
-                    // Configuración inicial del programa
-                    function setup() {
-                        // Configurar los pines 0, 1 y 2 como entradas para leer los sensores
-                        pinMode(0, INPUT);  // Sensor A0 (Potenciómetro IoT0 - Voltaje)
-                        pinMode(1, INPUT);  // Sensor A1 (Potenciómetro IoT1 - Voltaje)
-                        pinMode(2, INPUT);  // Sensor A2 (Temperature Sensor IoT2 - Temperatura)
-                        
-                        // Configuración del IoT Client usando la API IoE
-                        IoEClient.setup({
-                            type: "SensorBoard",  // Tipo de dispositivo
-                            states: [  // Definición de los estados de los sensores
-                                { name: "Sensor A0", type: "number", unit: "V" },  // Voltaje en A0
-                                { name: "Sensor A1", type: "number", unit: "V" },  // Voltaje en A1
-                                { 
-                                    name: "Temperatura", 
-                                    type: "number", 
-                                    unit: "°C",  // Unidad métrica
-                                    imperialUnit: "°F",  // Unidad imperial
-                                    toImperialConversion: "x * 1.8 + 32",  // Conversión a °F
-                                    toMetricConversion: "(x - 32) / 1.8",  // Conversión a °C
-                                    decimalDigits: 1  // Un decimal para la temperatura
-                                }
-                            ]
-                        });
-                    }
-                    
-                    // Bucle principal que se ejecuta continuamente
-                    function loop() {
-                        // Leer los valores analógicos de los sensores (rango: 0 a 1023)
-                        var valorA0 = analogRead(0);  // Valor del sensor A0 (Voltaje)
-                        var valorA1 = analogRead(1);  // Valor del sensor A1 (Voltaje)
-                        var valorA2 = analogRead(2);  // Valor del sensor A2 (Temperatura)
-                    
-                        // Convertir el valor de A2 (0-1023) a un rango de temperatura (-100°C a 100°C)
-                        var temperatura = map(valorA2, 0, 1023, -100, 100);
-                    
-                        // Crear un arreglo con los datos de los sensores
-                        var data = [valorA0, valorA1, temperatura];
-                    
-                        // Enviar los datos al IoT Monitor usando la API IoE
-                        IoEClient.reportStates(data);
-                    
-                        // Imprimir los datos enviados en la consola serial para depuración
-                        Serial.println("Datos enviados: " + data.join(", "));
-                    
-                        // Esperar 1 segundo antes de la próxima lectura
-                        delay(1000);
-                    }
-                    
-                    // Función auxiliar para mapear un valor de un rango a otro
-                    function map(x, in_min, in_max, out_min, out_max) {
-                        // Fórmula de mapeo: (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-                        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-                    }
-                    
+            // Configuración inicial del programa
+            function setup() {
+                // Configurar los pines 0, 1 y 2 como entradas para leer los sensores
+                pinMode(0, INPUT);  // Sensor A0 (Potenciómetro IoT0 - Voltaje)
+                pinMode(1, INPUT);  // Sensor A1 (Potenciómetro IoT1 - Voltaje)
+                pinMode(2, INPUT);  // Sensor A2 (Temperature Sensor IoT2 - Temperatura)
+                
+                // Configuración del IoT Client usando la API IoE
+                IoEClient.setup({
+                    type: "SensorBoard",  // Tipo de dispositivo
+                    states: [  // Definición de los estados de los sensores
+                        { name: "Sensor A0", type: "number", unit: "V" },  // Voltaje en A0
+                        { name: "Sensor A1", type: "number", unit: "V" },  // Voltaje en A1
+                        { 
+                            name: "Temperatura", 
+                            type: "number", 
+                            unit: "°C",  // Unidad métrica
+                            imperialUnit: "°F",  // Unidad imperial
+                            toImperialConversion: "x * 1.8 + 32",  // Conversión a °F
+                            toMetricConversion: "(x - 32) / 1.8",  // Conversión a °C
+                            decimalDigits: 1  // Un decimal para la temperatura
+                        }
+                    ]
+                });
+            }
+            
+            // Bucle principal que se ejecuta continuamente
+            function loop() {
+                // Leer los valores analógicos de los sensores (rango: 0 a 1023)
+                var valorA0 = analogRead(0);  // Valor del sensor A0 (Voltaje)
+                var valorA1 = analogRead(1);  // Valor del sensor A1 (Voltaje)
+                var valorA2 = analogRead(2);  // Valor del sensor A2 (Temperatura)
+            
+                // Convertir el valor de A2 (0-1023) a un rango de temperatura (-100°C a 100°C)
+                var temperatura = map(valorA2, 0, 1023, -100, 100);
+            
+                // Crear un arreglo con los datos de los sensores
+                var data = [valorA0, valorA1, temperatura];
+            
+                // Enviar los datos al IoT Monitor usando la API IoE
+                IoEClient.reportStates(data);
+            
+                // Imprimir los datos enviados en la consola serial para depuración
+                Serial.println("Datos enviados: " + data.join(", "));
+            
+                // Esperar 1 segundo antes de la próxima lectura
+                delay(1000);
+            }
+            
+            // Función auxiliar para mapear un valor de un rango a otro
+            function map(x, in_min, in_max, out_min, out_max) {
+                // Fórmula de mapeo: (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+            }
+            
 
 
 
