@@ -344,6 +344,15 @@ El código configura los pines de entrada, define los estados de los sensores, m
 
 El programa se ejecuta en un bucle infinito: lee los sensores, procesa los datos (mapea la temperatura), los envía al IoT Monitor y espera 1 segundo antes de repetir el proceso.
 
+### Diagrama de Flujo del Programa
+
+![.](imagenesWiki/diagrama1.png)
+
+
+
+
+
+
 ## Pruebas y Validaciones
 
 Para asegurar el correcto funcionamiento de nuestra red IoT en máquinas expendedoras, realizamos diversas pruebas en **Cisco Packet Tracer** para validar la transmisión de datos, la estabilidad de la conexión y la correcta detección de eventos críticos.  
