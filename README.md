@@ -15,7 +15,7 @@ De acuerdo con el artículo consultado "Cellular vs WiFi for IoT: Choosing the B
 
 Además, el artículo menciona que Wi-Fi es ideal para dispositivos IoT en ubicaciones fijas, como almacenes o equipos industriales, lo que refuerza nuestra elección para las máquinas expendedoras inteligentes. Dado que la universidad ya cuenta con puntos de acceso Wi-Fi, esta opción permite la conexión directa de los dispositivos sin incurrir en costos adicionales por certificaciones o planes de datos móviles, según Eseye "Wi-Fi offers fewer benefits in terms of mobility as the IoT devices will require additional infrastructure such as routers, gateways, or repeaters, that would all need to be pre-configured"[6].
 
-En conclusión, la infraestructura preexistente dentro del campus universitario facilita la implementación de Wi-Fi como la mejor opción para nuestras máquinas expendedoras inteligentes, garantizando estabilidad, eficiencia de costos y compatibilidad con la red actual.
+La infraestructura preexistente dentro del campus universitario facilita la implementación de Wi-Fi como la mejor opción para nuestras máquinas expendedoras inteligentes, garantizando estabilidad, eficiencia de costos y compatibilidad con la red actual.
 
 ## Protocolos Utilizados
 
