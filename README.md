@@ -349,8 +349,9 @@ El programa se ejecuta en un bucle infinito: lee los sensores, procesa los datos
 ![.](imagenesWiki/diagrama1.png)
 
 
+### Diagrama Interacción entre Componentes (Diagrama de Secuencia)
 
-
+![.](imagenesWiki/diagramas2.png)
 
 
 ## Pruebas y Validaciones
